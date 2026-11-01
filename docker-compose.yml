@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: friends_house_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      # Executa automat scriptul SQL generat din Workbench la prima pornire a containerului
+      - ./src/main/resources/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      # Pastreaza datele salvate pe disc chiar daca opresti containerul
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
